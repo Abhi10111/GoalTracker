@@ -5,17 +5,12 @@ import CircleCheckbox from "./CheckBox.jsx";
 import "./taskcard.css";
 
 
-export default function TaskCard({ task }) {
+export default function TaskCard({ task, toggleSubtask }) {
     const [subtasksOpen, setSubTaskOpen] = useState(false);
-    const [subtasks, setSubTasks] = useState(task.subtasks)
-    const totalSubtasks = task.subtasks?.length || 0;
+    const subtasks = task.subtasks
+    const totalSubtasks = subtasks?.length || 0;
+    const completedSubtasks = subtasks?.filter(subtask => subtask.completed).length || 0;
 
-    function toggleSubtask(id) {
-        setSubTasks(subtasks.map(s =>
-            s.id === id
-                ? { ...s, completed: !s.completed }
-                : s));
-    }
     return (
         <motion.div
             className="taskcard"
@@ -28,10 +23,10 @@ export default function TaskCard({ task }) {
             </div>
             <div className="divider"></div>
             <div className="subtasks">
-                <div className="subtasks-header">
+                <div className="subtasks-header" onClick={() => setSubTaskOpen(!subtasksOpen)}>
                     <div className="flex justify-between items-center">
                         <span>
-                            0/{totalSubtasks} subtasks
+                            {completedSubtasks}/{totalSubtasks} subtasks
                         </span>
                         {/* <motion.button
                             whileHover={{ scale: 1.2 }}
@@ -39,11 +34,7 @@ export default function TaskCard({ task }) {
                             <Plus className="opacity-30 w-24 h-24" />
                         </motion.button> */}
                     </div>
-                    <motion.button
-                        onClick={() => setSubTaskOpen(!subtasksOpen)}
-                    >
-                        <ChevronDown className={subtasksOpen ? "rotate-180 opacity-70" : "opacity-30"} color='#5a5a5a' />
-                    </motion.button>
+                    <ChevronDown className={subtasksOpen ? "rotate-180 opacity-70" : "opacity-30"} color='#5a5a5a' />
 
                 </div>
                 {subtasksOpen && (
@@ -60,9 +51,9 @@ export default function TaskCard({ task }) {
                             >
                                 <CircleCheckbox
                                     isChecked={subtask.completed}
-                                    onClick={() => toggleSubtask(subtask.id)}
+                                    onClick={() => toggleSubtask(task.id, subtask.id)}
                                 />
-                                <span className={subtask.completed? "line-through opacity-50": "opacity-100"}> {subtask.task}</span>
+                                <span className={subtask.completed ? "line-through opacity-50" : "opacity-100"}> {subtask.task}</span>
                             </motion.div>
                         )}
 
