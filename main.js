@@ -2,12 +2,14 @@ import { app, BrowserWindow, ipcMain } from "electron";
 import { fileURLToPath } from "url";
 import fs from "fs";
 import path from "path";
+import { log } from "console";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const taskPath = path.join(__dirname, "tasks.json")
 const width = 370;
-const height = 870;
+const collapsedHeight = 150;
+const fullHeight = 870;
 
 let win = null;
 
@@ -31,16 +33,23 @@ ipcMain.handle("tasks:update", (_, tasks) => {
   return true;
 });
 
+ipcMain.handle("window:resize", (event, collapsed) => {
+  const win = BrowserWindow.fromWebContents(event.sender);
+  if (win) {
+    win.setBounds({width:width, height:collapsed ? collapsedHeight : fullHeight});
+  }
+});
+
 function create() {
   win = new BrowserWindow({
     x: 100,
     width: width,
-    height: height,
+    height: fullHeight,
     frame: false,
     transparent: true,
     alwaysOnTop: true,
     // skipTaskbar: true,
-    // resizable: true,
+    resizable: true,
     webPreferences: {
       preload: path.join(__dirname, "./preload.cjs")
     }
