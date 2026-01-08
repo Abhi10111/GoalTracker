@@ -1,0 +1,75 @@
+.taskcard {
+    background-color: rgb(37, 37, 37);
+    width: 100%;
+    border-radius: 6px;
+    padding: 2% 0;
+    margin: 1.8% 0;
+    border: 2px solid #1e1e1e;
+    -webkit-app-region: no-drag;
+}
+
+.taskcard button {
+    height: 24px;
+    width: 24px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
+    border: none;
+}
+
+.taskcard .task-info {
+    margin: 0.4rem 0.8rem;
+    display: flex;
+    justify-content: space-between;
+    font-family: "Inter", system-ui;
+    font-size: 14px;
+    font-weight: 400;
+}
+
+.taskcard .divider {
+    height: 2px;
+    margin: 0 auto;
+    width: 95%;
+    background: rgb(47, 47, 47);
+}
+
+.taskcard .subtasks {
+    display: flex;
+    flex-direction: column;
+    font-weight: lighter;
+}
+
+.taskcard .subtasks-header {
+    margin: 0.2rem 0.8rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: "Inter", system-ui;
+    font-size: 14px;
+    font-weight: 400;
+    color: rgba(104, 104, 104);
+}
+
+.taskcard .subtask-area {
+    display: flex;
+    flex-direction: column;
+    margin: 0.1rem 0.8rem
+}
+
+.taskcard .subtask {
+    display: flex;
+    margin: 1px 1px;
+    gap: 5px;
+    align-items: center;
+    font-family: "Inter", system-ui;
+    font-size: 14px;
+    font-weight: lighter;
+
+}
+
+.taskcard span {
+    display: flex;
+    align-items: flex-start;
+}
