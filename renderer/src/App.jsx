@@ -1,6 +1,6 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
-
+import { TaskProvider } from './components/Taskutils.jsx'
 import './index.css'
 
 import { MotionConfig } from 'framer-motion'
@@ -20,7 +20,11 @@ function App() {
         <h1>Today</h1>
         <ResizeButton collapsed={collapsed} onClick={() => setCollapsed(!collapsed)} />
       </div>
-      {!collapsed && <TaskArea />}
+      {!collapsed &&
+        <TaskProvider>
+          <TaskArea />
+        </TaskProvider>
+      }
     </div>
   )
 }

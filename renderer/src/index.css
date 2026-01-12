@@ -20,7 +20,7 @@ button {
 input{
   -webkit-app-region: no-drag;
 }
-span {
+span,button{
   user-select: none;
   cursor: default;
 }
