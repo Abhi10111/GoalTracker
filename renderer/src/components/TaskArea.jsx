@@ -63,9 +63,9 @@ export default function TaskArea() {
 
     return (
         <motion.div
-            initial={{ opacity: 0, y: 50 }}
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: "anticipate" }}
+            transition={{ duration: 0.5, ease: "anticipate" }}
             className='task-area'
         >
             {tasks.map(task => <TaskCard task={task} toggleSubtask={toggleSubtask} />)}

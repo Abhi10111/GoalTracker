@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { CheckCircle, Trash2, ChevronDown, Plus } from "lucide-react";
+// import { AddTaskBox } from "./Taskutils.jsx";
+import { CheckCircle, Trash2, Plus } from "lucide-react";
 import CircleCheckbox from "./CheckBox.jsx";
 import "./taskcard.css";
+import SubtaskHeader from "./SubtaskHeader.jsx";
 
 function SubTasks({ taskId, subtasks, toggleSubtask }) {
     return (
@@ -29,8 +31,10 @@ function SubTasks({ taskId, subtasks, toggleSubtask }) {
     )
 
 }
+
 export default function TaskCard({ task, toggleSubtask }) {
     const [subtasksOpen, setSubTaskOpen] = useState(false);
+    const [isAddingSubTask, setAddingSubTasks] = useState(false);
     const subtasks = task.subtasks
     const totalSubtasks = subtasks?.length || 0;
     const completedSubtasks = subtasks?.filter(subtask => subtask.completed).length || 0;
@@ -47,22 +51,15 @@ export default function TaskCard({ task, toggleSubtask }) {
             </div>
             <div className="divider"></div>
             <div className="subtasks">
-                <div className="subtasks-header" onClick={() => setSubTaskOpen(!subtasksOpen)}>
-                    <div className="flex justify-between items-center">
-                        <span>
-                            {completedSubtasks}/{totalSubtasks} subtasks
-                        </span>
-                        {/* <motion.button
-                            whileHover={{ scale: 1.2 }}
-                        >
-                            <Plus className="opacity-30 w-24 h-24" />
-                        </motion.button> */}
-                    </div>
-                    <ChevronDown className={subtasksOpen ? "rotate-180 opacity-70" : "opacity-30"} color='#5a5a5a' />
-
-                </div>
+                <SubtaskHeader
+                    totalSubtasks={totalSubtasks}
+                    completedSubtasks={completedSubtasks}
+                    subtasksOpen={subtasksOpen}
+                    onClick={() => setSubTaskOpen(!subtasksOpen)}
+                    onClickAddSubtask={()=>setAddingSubTasks(!isAddingSubTask)} />
                 {subtasksOpen && <SubTasks subtasks={subtasks} taskId={task.id} toggleSubtask={toggleSubtask} />}
             </div >
+            {/* {isAddingSubTask && <AddTaskBox taskSetter={()=>console.log("adding subtask")} onClose={() => setAddingSubTasks(false)} />} */}
         </motion.div >
     )
 }
