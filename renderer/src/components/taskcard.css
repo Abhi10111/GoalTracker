@@ -17,6 +17,7 @@
     justify-content: center;
     background-color: transparent;
     border: none;
+    color:#5a5a5a
 }
 
 .taskcard .task-info {
@@ -61,11 +62,11 @@
 .taskcard .subtask {
     display: flex;
     margin: 1px 1px;
-    gap: 5px;
     align-items: center;
     font-family: "Inter", system-ui;
     font-size: 14px;
     font-weight: lighter;
+    justify-content: space-between;
 
 }
 
