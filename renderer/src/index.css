@@ -20,15 +20,16 @@ button {
 input{
   -webkit-app-region: no-drag;
 }
-span {
+span,button{
   user-select: none;
   cursor: default;
 }
 
 #root {
   margin: 0 auto;
-  padding: 0px;
   height: 90%;
+  padding: 0px;
+  box-sizing: border-box;
   border-radius: 8px;
   overflow: hidden;
   background-color: rgb(22, 22, 22);

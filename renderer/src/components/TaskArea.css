@@ -21,6 +21,12 @@
     border-radius: 4px;
 }
 
+.subtasks button{
+    background-color: transparent;
+    padding: 0;
+    height: fit-content;
+    margin:0;
+}
 .add-task-box{
     display: flex;
     flex-direction: column;

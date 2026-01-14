@@ -8,7 +8,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const taskPath = path.join(__dirname, "tasks.json")
 const width = 370;
-const collapsedHeight = 150;
+const collapsedHeight = 100;
 const fullHeight = 870;
 
 let win = null;
