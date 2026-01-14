@@ -1,6 +1,6 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
-import { TaskProvider } from './components/Taskutils.jsx'
+import { TaskProvider } from './utils/Taskutils.jsx'
 import './index.css'
 
 import { MotionConfig } from 'framer-motion'

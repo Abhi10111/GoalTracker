@@ -1,8 +1,9 @@
 import React, { useContext } from "react"
 import { motion } from "framer-motion";
-import { ChevronDown, Plus,Trash2 } from "lucide-react";
+import { ChevronDown, Plus, Trash2 } from "lucide-react";
 import CircleCheckbox from "./CheckBox.jsx";
-import { IsModifiedToday, TasksContext } from "./Taskutils.jsx";
+import { IsModifiedToday, TasksContext } from "../utils/Taskutils.jsx";
+import { ActionPane, ActionButton } from "../utils/UIUtils.jsx";
 
 export function SubTasks({ taskId }) {
     const { tasks, dispatch } = useContext(TasksContext);
@@ -14,7 +15,9 @@ export function SubTasks({ taskId }) {
             transition={{ duration: 0.2 }}
         >
             {subtasks?.map(subtask =>
-                <motion.div className="subtask">
+                <motion.div className="subtask"
+                    initial="hidden"
+                    whileHover="hovered">
                     <div className="flex items-center" style={{ gap: '5px' }}>
                         <CircleCheckbox
                             isChecked={subtask.completed}
@@ -22,13 +25,11 @@ export function SubTasks({ taskId }) {
                         />
                         <span className={subtask.completed ? "line-through opacity-50" : "opacity-100"}> {subtask.task}</span>
                     </div>
-                    <motion.button 
-                    whileHover={{ color: '#ffffff' }}
-                    onClick={() => {
-                        dispatch({ type: "DELETE_SUBTASK", payload: { taskId: taskId, subtaskId: subtask.id } })
-                    }}>
-                        <Trash2 size={14} />
-                    </motion.button>
+                    <ActionPane time={subtask.estimatedTime} animationType={"fade"}>
+                        <ActionButton
+                            icon={<Trash2 size={14} />}
+                            onClick={() => { dispatch({ type: "DELETE", payload: { taskId: taskId, subtaskId: subtask.id } }) }} />
+                    </ActionPane>
                 </motion.div>
             )}
 
