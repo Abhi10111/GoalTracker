@@ -1,6 +1,6 @@
 import React, { useContext } from "react"
 import { motion } from "framer-motion";
-import { ChevronDown, Plus } from "lucide-react";
+import { ChevronDown, Plus,Trash2 } from "lucide-react";
 import CircleCheckbox from "./CheckBox.jsx";
 import { IsModifiedToday, TasksContext } from "./Taskutils.jsx";
 
@@ -15,11 +15,20 @@ export function SubTasks({ taskId }) {
         >
             {subtasks?.map(subtask =>
                 <motion.div className="subtask">
-                    <CircleCheckbox
-                        isChecked={subtask.completed}
-                        onClick={() => dispatch({ type: "TOGGLE_SUBTASK", payload: { taskId: taskId, subtaskId: subtask.id } })}
-                    />
-                    <span className={subtask.completed ? "line-through opacity-50" : "opacity-100"}> {subtask.task}</span>
+                    <div className="flex items-center" style={{ gap: '5px' }}>
+                        <CircleCheckbox
+                            isChecked={subtask.completed}
+                            onClick={() => dispatch({ type: "TOGGLE_SUBTASK", payload: { taskId: taskId, subtaskId: subtask.id } })}
+                        />
+                        <span className={subtask.completed ? "line-through opacity-50" : "opacity-100"}> {subtask.task}</span>
+                    </div>
+                    <motion.button 
+                    whileHover={{ color: '#ffffff' }}
+                    onClick={() => {
+                        dispatch({ type: "DELETE_SUBTASK", payload: { taskId: taskId, subtaskId: subtask.id } })
+                    }}>
+                        <Trash2 size={14} />
+                    </motion.button>
                 </motion.div>
             )}
 

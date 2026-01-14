@@ -50,12 +50,25 @@ function tasksReducer(state, action) {
                         subtasks: [
                             ...task.subtasks,
                             {
-                                id: task.subtasks.length + 1,
+                                id: crypto.randomUUID(),
                                 task: action.payload.title,
                                 completed: false,
                                 lastModified: new Date().toISOString()
                             }
                         ]
+                    }
+                    : task
+            );
+            window.api.updateTasks(updatedState);
+            return updatedState;
+        }
+
+        case "DELETE_SUBTASK": {
+            const updatedState = state.map(task =>
+                task.id === action.payload.taskId
+                    ? {
+                        ...task,
+                        subtasks: task.subtasks.filter(subtask => subtask.id !== action.payload.subtaskId)
                     }
                     : task
             );
