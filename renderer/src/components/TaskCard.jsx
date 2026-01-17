@@ -10,7 +10,7 @@ export default function TaskCard({ task }) {
     const [subtasksOpen, setSubTaskOpen] = useState(false);
     const [isAddingSubTask, setAddingSubTasks] = useState(false);
     const { _, dispatch } = useContext(TasksContext);
-    const taskTime = task.subtasks?.reduce((total, subtask) => !subtask.completed ? total + (subtask.estimatedTime || 0) : total, 0) || 0;
+    const taskTime = task.subtasks?.reduce((total, subtask) => total + (subtask.estimatedTime || 0), 0) || 0;
     return (
         <motion.div
             className="taskcard"
