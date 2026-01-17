@@ -3,7 +3,7 @@ import { useState } from "react";
 import { createContext, useContext, useReducer, useEffect } from "react";
 import { motion } from "framer-motion";
 // import { stat } from "original-fs";
-
+import Cleave from "cleave.js/react";
 
 export const TasksContext = createContext(null);
 
@@ -14,15 +14,22 @@ function tasksReducer(state, action) {
             (
                 {
                     ...task,
-                    subtasks: task.subtasks.map(subtask =>
-                        (subtask.daily || false) && subtask.completed && !IsModifiedToday(subtask.lastModified || "")
-                            ? {
-                                ...subtask,
-                                completed: false,
-                                lastModified: new Date().toISOString()
+                    subtasks: task.subtasks.map(subtask => {
+                        if (subtask.completed && !IsModifiedToday(subtask.lastModified || "")) {
+                            if (subtask.daily) {
+                                return {
+                                    ...subtask,
+                                    completed: false,
+                                    lastModified: new Date().toISOString()
+                                }
                             }
-                            : subtask
-                    )
+                            return null;
+                        }
+                        else {
+                            return subtask;
+                        }
+                    }
+                    ).filter(Boolean)
                 }
             ));
             window.api.updateTasks(updatedState);
@@ -59,6 +66,7 @@ function tasksReducer(state, action) {
         }
 
         case "ADD_SUBTASK": {
+            const [hh, mm] = action.payload.time.split(":")
             const updatedState = state.map(task =>
                 task.id === action.payload.taskId
                     ? {
@@ -68,7 +76,7 @@ function tasksReducer(state, action) {
                             {
                                 id: crypto.randomUUID(),
                                 task: action.payload.title,
-                                estimatedTime: 0,
+                                estimatedTime: parseInt(hh, 10) * 60 + parseInt(mm, 10),
                                 daily: false,
                                 completed: false,
                                 lastModified: new Date().toISOString()
@@ -119,23 +127,38 @@ export function IsModifiedToday(dateString) {
     const lastModified = new Date(dateString).getTime();
     return lastModified >= todayStart;
 }
+
 export function AddTaskBox({ taskId, onClose }) {
     const [taskTitle, setTaskTitle] = useState("");
+    const [estimatedTime, setEstimatedTime] = useState("00:00");
     const { _, dispatch } = useContext(TasksContext);
+
+    function Submit(e) {
+        if (e.key === "Enter" && !e.nativeEvent.isComposing) {
+            e.preventDefault();
+            taskId != null
+                ? dispatch({ type: "ADD_SUBTASK", payload: { taskId: taskId, title: taskTitle, time: estimatedTime } })
+                : dispatch({ type: "ADD_TASK", payload: { title: taskTitle, time: estimatedTime } });
+            onClose();
+        }
+    }
     return (
         <motion.div className="add-task-box">
-            <input placeholder="Enter task title"
+            <input className="title-input"
+                placeholder="Enter task title"
                 onChange={(e) => setTaskTitle(e.target.value)}
-                onKeyDown={e => {
-                    if (e.key === "Enter" && !e.nativeEvent.isComposing) {
-                        e.preventDefault();
-                        taskId != null
-                            ? dispatch({ type: "ADD_SUBTASK", payload: { taskId: taskId, title: taskTitle } })
-                            : dispatch({ type: "ADD_TASK", payload: { title: taskTitle } });
-                        onClose();
-                    }
-                }}
+                onKeyDown={e => Submit(e)}
                 autoFocus
+            />
+            <Cleave
+                className="estimated-time-input"
+                options={{
+                    time: true,
+                    timePattern: ["h", "m"]
+                }}
+                placeholder="HH:MM"
+                onChange={(e) => setEstimatedTime(e.target.value)}
+                onKeyDown={(e) => Submit(e)}
             />
             {/* <motion.button
                 style={{ backgroundColor: "#00ff00", color: "#000000", borderRadius: "20px", padding: "10px 12px", opacity: 0.5 }}
