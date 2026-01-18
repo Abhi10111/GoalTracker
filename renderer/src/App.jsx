@@ -6,6 +6,7 @@ import './index.css'
 import { MotionConfig } from 'framer-motion'
 import ResizeButton from './components/ResizeButton';
 import TaskArea from './components/TaskArea';
+import { SessionProvider } from './utils/TimerUtils.jsx'
 
 function App() {
   const [collapsed, setCollapsed] = useState(false);
@@ -20,11 +21,13 @@ function App() {
         <h1>Today</h1>
         <ResizeButton collapsed={collapsed} onClick={() => setCollapsed(!collapsed)} />
       </div>
-      {!collapsed &&
-        <TaskProvider>
-          <TaskArea />
-        </TaskProvider>
-      }
+      <SessionProvider>
+        {!collapsed &&
+          <TaskProvider>
+            <TaskArea />
+          </TaskProvider>
+        }
+      </SessionProvider>
     </div>
   )
 }
