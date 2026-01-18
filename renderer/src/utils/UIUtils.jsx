@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { SessionContext } from "./TimerUtils.jsx";
 
 const actionButtonVariants = {
     static: {},
@@ -45,14 +46,29 @@ export function ActionButton({ icon, onClick }) {
     );
 }
 
-export function ActionPane({ time, children, animationType }) {
+
+export function Clock({ remainingSec }) {
+    const hours = Math.floor(remainingSec / 3600);
+    const minutes = Math.floor((remainingSec % 3600) / 60);
+    const seconds = remainingSec % 60;
+
     return (
-        <div className="flex items-center justify-end" style={{ position: "relative", width: "60px" }}>
-            <motion.span
-                style={{ opacity: 0.5, position: "absolute", pointerEvents: "none" }}
-                variants={{ hovered: { opacity: 0 } }}>
-                {time || 0}min
-            </motion.span>
+        <motion.div
+            className="clock"
+            style={{ position: "absolute", pointerEvents: "none" }}
+            variants={{ hovered: { opacity: 0 } }}
+        >
+            {String(hours).padStart(2, "0")}:
+            {String(minutes).padStart(2, "0")}:
+            {String(seconds).padStart(2, "0")}
+        </motion.div>
+    );
+}
+
+export function ActionPane({ idle, children, animationType }) {
+    return (
+        <div className="flex items-center justify-end" style={{ position: "relative", width: "40%" }}>
+            {idle}
             <motion.div className="actions"
                 variants={animationType === "slide" ? actionVariantsSlide : actionVariantsFade}>
                 {children}
