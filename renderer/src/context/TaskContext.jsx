@@ -1,9 +1,5 @@
 import React from "react";
-import { useState } from "react";
-import { createContext, useContext, useReducer, useEffect } from "react";
-import { motion } from "framer-motion";
-// import { stat } from "original-fs";
-import Cleave from "cleave.js/react";
+import { createContext, useReducer, useEffect } from "react";
 
 export const TasksContext = createContext(null);
 
@@ -128,45 +124,3 @@ export function IsModifiedToday(dateString) {
     return lastModified >= todayStart;
 }
 
-export function AddTaskBox({ taskId, onClose }) {
-    const [taskTitle, setTaskTitle] = useState("");
-    const [estimatedTime, setEstimatedTime] = useState("00:00");
-    const { _, dispatch } = useContext(TasksContext);
-
-    function Submit(e) {
-        if (e.key === "Enter" && !e.nativeEvent.isComposing) {
-            e.preventDefault();
-            taskId != null
-                ? dispatch({ type: "ADD_SUBTASK", payload: { taskId: taskId, title: taskTitle, time: estimatedTime } })
-                : dispatch({ type: "ADD_TASK", payload: { title: taskTitle, time: estimatedTime } });
-            onClose();
-        }
-    }
-    return (
-        <motion.div className="add-task-box">
-            <input className="title-input"
-                placeholder="Enter task title"
-                onChange={(e) => setTaskTitle(e.target.value)}
-                onKeyDown={e => Submit(e)}
-                autoFocus
-            />
-            <Cleave
-                className="estimated-time-input"
-                options={{
-                    time: true,
-                    timePattern: ["h", "m"]
-                }}
-                placeholder="HH:MM"
-                onChange={(e) => setEstimatedTime(e.target.value)}
-                onKeyDown={(e) => Submit(e)}
-            />
-            {/* <motion.button
-                style={{ backgroundColor: "#00ff00", color: "#000000", borderRadius: "20px", padding: "10px 12px", opacity: 0.5 }}
-                whileHover={{ opacity: 0.8 }}
-                onClick={() => HandleAdd()}
-            >
-                Confirm
-            </motion.button> */}
-        </motion.div>
-    )
-}

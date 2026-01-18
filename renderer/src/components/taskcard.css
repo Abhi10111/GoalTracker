@@ -117,3 +117,10 @@
     caret-color: #808080;
     outline: none;
 }
+
+.clock{
+    display: block;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 24px;
+    text-align: left;
+}
