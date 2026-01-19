@@ -7,9 +7,9 @@ import { log } from "console";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const taskPath = path.join(__dirname, "tasks.json")
-const width = 370;
-const collapsedHeight = 100;
-const fullHeight = 870;
+const width = 320;
+const collapsedHeight = 60;
+const fullHeight = 890;
 
 let win = null;
 

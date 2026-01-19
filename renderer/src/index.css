@@ -7,6 +7,7 @@ body {
   overflow: hidden;
   height: 100vh;
   padding: 0;
+  margin: 0 auto;
   -webkit-app-region: drag;
 }
 
