@@ -2,7 +2,8 @@ import React from "react";
 import { useState, useContext } from "react";
 import { motion } from "framer-motion";
 import { Plus } from 'lucide-react';
-import { TasksContext, AddTaskBox } from '../utils/Taskutils.jsx';
+import { TasksContext } from '../context/TaskContext.jsx';
+import { AddTaskBox } from "../utils/UIUtils.jsx";
 import TaskCard from './TaskCard';
 import './TaskArea.css'
 
