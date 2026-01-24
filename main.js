@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain } from "electron";
+import { app, BrowserWindow, ipcMain, screen } from "electron";
 import { fileURLToPath } from "url";
 import fs from "fs";
 import path from "path";
@@ -12,6 +12,7 @@ const collapsedHeight = 60;
 const fullHeight = 890;
 
 let win = null;
+let dragOffset = null;
 
 function readTasks() {
   const raw = fs.readFileSync(taskPath, 'utf-8')
@@ -36,7 +37,29 @@ ipcMain.handle("tasks:update", (_, tasks) => {
 ipcMain.handle("window:resize", (event, collapsed) => {
   const win = BrowserWindow.fromWebContents(event.sender);
   if (win) {
-    win.setBounds({width:width, height:collapsed ? collapsedHeight : fullHeight});
+    win.setBounds({ width: width, height: collapsed ? collapsedHeight : fullHeight });
+  }
+});
+
+
+ipcMain.handle("window:drag_start", (event) => {
+  const win = BrowserWindow.fromWebContents(event.sender);
+  if (!win) return;
+
+  const cursor = screen.getCursorScreenPoint();
+  const [winX, winY] = win.getPosition();
+
+  dragOffset = {
+    x: cursor.x - winX,
+    y: cursor.y - winY,
+  };
+});
+
+ipcMain.handle("window:drag", (event) => {
+  const win = BrowserWindow.fromWebContents(event.sender);
+  const cursor = screen.getCursorScreenPoint();
+  if (win) {
+    win.setBounds({ x: cursor.x - dragOffset.x, y: cursor.y - dragOffset.y, width: width, height: collapsedHeight });
   }
 });
 
