@@ -11,9 +11,10 @@ export default function TaskCard({ task }) {
     const [subtasksOpen, setSubTaskOpen] = useState(false);
     const [isAddingSubTask, setAddingSubTasks] = useState(false);
     const { _, dispatch } = useContext(TasksContext);
-    const { curSession, StartSession, EndSession } = useContext(SessionContext);
+    const { curSession, StartSession, PauseResumeSession, EndSession } = useContext(SessionContext);
     const taskTime = task.subtasks?.reduce((total, subtask) => !subtask.completed ? total + (subtask.estimatedTime || 0) : 0, 0) || 0;
     const isTaskActive = curSession?.taskId === task.id;
+    const isTaskPaused = isTaskActive && curSession.isPaused;
 
     return (
         <motion.div
@@ -29,8 +30,9 @@ export default function TaskCard({ task }) {
                     <ActionPane
                         idle={<Clock remainingSec={curSession.remainingSec} />}
                         animationType={"slide"}>
-                        <ActionButton icon={<Pause size={14} />} onClick={() => { }} />
-                        <ActionButton icon={<CircleCheckBig size={14} />} onClick={() => { EndSession() }} />
+                        {!isTaskPaused ? <ActionButton icon={<Pause size={14} />} onClick={() => { PauseResumeSession(task.id) }} />
+                            : <ActionButton icon={<Play size={14} />} onClick={() => { PauseResumeSession(task.id) }} />}
+                        <ActionButton icon={<CircleCheckBig size={14} />} onClick={() => { EndSession(task.id) }} />
                     </ActionPane>}
                 {!isTaskActive &&
                     <ActionPane

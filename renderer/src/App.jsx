@@ -4,6 +4,7 @@ import { TaskProvider } from './context/TaskContext.jsx'
 import './index.css'
 
 import { MotionConfig } from 'framer-motion'
+import FocusedTask from './components/FocusedTask.jsx'
 import ResizeButton from './components/ResizeButton';
 import TaskArea from './components/TaskArea';
 import { SessionProvider } from './context/SessionContext.jsx'
@@ -17,18 +18,21 @@ function App() {
 
   return (
     <div className='App'>
-      <div className='header'>
-        <h1>Today</h1>
-        <ResizeButton collapsed={collapsed} onClick={() => setCollapsed(!collapsed)} />
-      </div>
       <SessionProvider>
-        {!collapsed &&
-          <TaskProvider>
-            <TaskArea />
-          </TaskProvider>
-        }
-      </SessionProvider>
-    </div>
+        <TaskProvider>
+          {collapsed ?
+            <FocusedTask unFocus={() => setCollapsed(!collapsed)} />
+            : <>
+              <div className='header'>
+                <h1>Today</h1>
+                <ResizeButton collapsed={collapsed} onClick={() => setCollapsed(!collapsed)} />
+              </div>
+              <TaskArea />
+            </>
+          }
+        </TaskProvider>
+      </SessionProvider >
+    </div >
   )
 }
 
