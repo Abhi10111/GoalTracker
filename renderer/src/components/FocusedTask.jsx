@@ -7,6 +7,20 @@ import { Play, Pause, CircleCheckBig, Maximize2 } from "lucide-react";
 import { Clock } from '../utils/UIUtils.jsx';
 import './FocusedTask.css';
 
+function drag(e) {
+    if (e.target.closest("button")) {
+        return;
+    }
+
+    window.api.startDrag();
+    const mouseUp = (ev) => {
+        window.removeEventListener('mousemove', window.api.drag)
+        window.removeEventListener("mouseup", mouseUp, true);
+    }
+
+    window.addEventListener('mousemove', window.api.drag)
+    window.addEventListener('mouseup', mouseUp, true)
+}
 export default function FocusedTask({ unFocus }) {
     const { curSession, _, PauseResumeSession, EndSession } = useContext(SessionContext);
     const { tasks, __ } = useContext(TasksContext);
@@ -16,7 +30,8 @@ export default function FocusedTask({ unFocus }) {
     return (
         <motion.div className="focused-task"
             initial="hidden"
-            whileHover="hovered">
+            whileHover="hovered"
+            onMouseDown={drag}>
             <span className={focusedTask?.completed ? "line-through opacity-70" : "opacity-100"} >
                 {focusedTask?.title ?? "No Task Active"}
             </span>
