@@ -1,9 +1,10 @@
 import React, { useContext } from 'react';
+import ActionButtons from './ActionButtons.jsx';
 import { motion } from 'framer-motion';
 import { SessionContext } from '../context/SessionContext.jsx';
 import { TasksContext } from '../context/TaskContext.jsx';
-import { ActionPane, ActionButton } from '../utils/UIUtils.jsx';
-import { Play, Pause, CircleCheckBig, Maximize2 } from "lucide-react";
+import { ActionPane } from '../utils/UIUtils.jsx';
+import { Maximize2 } from "lucide-react";
 import { Clock } from '../utils/UIUtils.jsx';
 import './FocusedTask.css';
 
@@ -22,10 +23,9 @@ function drag(e) {
     window.addEventListener('mouseup', mouseUp, true)
 }
 export default function FocusedTask({ unFocus }) {
-    const { curSession, _, PauseResumeSession, EndSession } = useContext(SessionContext);
-    const { tasks, __ } = useContext(TasksContext);
+    const { curSession } = useContext(SessionContext);
+    const { tasks } = useContext(TasksContext);
     const focusedTask = tasks.find(task => task.id === curSession?.taskId);
-    const isTaskPaused = curSession?.isPaused;
 
     return (
         <motion.div className="focused-task"
@@ -38,10 +38,15 @@ export default function FocusedTask({ unFocus }) {
             <ActionPane
                 idle={<Clock remainingSec={curSession?.remainingSec ?? 0} />}
                 animationType={"slide"}>
-                {!isTaskPaused ? <ActionButton icon={<Pause size={14} />} onClick={() => { PauseResumeSession(focusedTask.id) }} />
-                    : <ActionButton icon={<Play size={14} />} onClick={() => { PauseResumeSession(focusedTask.id) }} />}
-                <ActionButton icon={<CircleCheckBig size={14} />} onClick={() => { EndSession(focusedTask.id) }} />
-                <ActionButton icon={<Maximize2 size={14} />} onClick={() => { unFocus() }} />
+                {focusedTask && <ActionButtons type="pause_resume" taskId={focusedTask.id}/>}
+                {focusedTask && <ActionButtons type="extend" taskId={focusedTask.id} />}
+                {focusedTask && <ActionButtons type="complete" taskId={focusedTask.id} />}
+                <motion.button
+                    variants={{ hovered: { color: "#ffffff" } }}
+                    onClick={() => unFocus()}
+                    whileHover="hovered">
+                    <Maximize2 size={14} />
+                </motion.button>
             </ActionPane>
         </motion.div >
     );

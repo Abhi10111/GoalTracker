@@ -3,9 +3,6 @@ import { motion } from "framer-motion";
 import { TasksContext } from "../context/TaskContext.jsx";
 import Cleave from "cleave.js/react";
 
-const actionButtonVariants = {
-    hovered: { color: "#ffffff" }
-};
 
 const actionVariants = {
     "slide": {
@@ -36,18 +33,6 @@ const actionVariants = {
 
     }
 };
-
-export function ActionButton({ icon, onClick }) {
-    return (
-        <motion.button
-            variants={actionButtonVariants}
-            onClick={onClick}
-            whileHover="hovered">
-            {icon}
-        </motion.button>
-    );
-}
-
 
 export function Clock({ remainingSec }) {
     const hours = Math.floor(remainingSec / 3600);

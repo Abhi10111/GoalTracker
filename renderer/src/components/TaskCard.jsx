@@ -1,20 +1,17 @@
 import React, { useState, useContext } from "react";
+import ActionButtons from "./ActionButtons.jsx";
 import { motion } from "framer-motion";
 import "./taskcard.css";
 import { SubTasks, SubtaskHeader } from "./SubtaskComponents.jsx";
-import { TasksContext } from "../context/TaskContext.jsx";
-import { ActionButton, ActionPane, Clock, AddTaskBox } from "../utils/UIUtils.jsx";
-import { Play, Pause, Trash2, CircleCheckBig } from "lucide-react";
+import { ActionPane, Clock, AddTaskBox } from "../utils/UIUtils.jsx";
 import { SessionContext } from "../context/SessionContext.jsx";
 
 export default function TaskCard({ task }) {
     const [subtasksOpen, setSubTaskOpen] = useState(false);
     const [isAddingSubTask, setAddingSubTasks] = useState(false);
-    const { _, dispatch } = useContext(TasksContext);
-    const { curSession, StartSession, PauseResumeSession, EndSession } = useContext(SessionContext);
-    const taskTime = task.subtasks?.reduce((total, subtask) => !subtask.completed ? total + (subtask.estimatedTime || 0) : 0, 0) || 0;
+    const { curSession } = useContext(SessionContext);
+    const taskTime = task.completed ? 0 : task.estimatedTime;
     const isTaskActive = curSession?.taskId === task.id;
-    const isTaskPaused = isTaskActive && curSession.isPaused;
 
     return (
         <motion.div
@@ -22,17 +19,17 @@ export default function TaskCard({ task }) {
             initial="hidden"
             whileHover="hovered"
         >
-            <div className="task-info">
-                <span className={task.completed ? "line-through opacity-70" : "opacity-100"} >
+            <div className={`task-info ${task.completed ? "line-through opacity-70" : "opacity-100"}`}>
+                <span  >
                     {task.title}
                 </span>
                 {isTaskActive &&
                     <ActionPane
                         idle={<Clock remainingSec={curSession.remainingSec} />}
                         animationType={"slide"}>
-                        {!isTaskPaused ? <ActionButton icon={<Pause size={14} />} onClick={() => { PauseResumeSession(task.id) }} />
-                            : <ActionButton icon={<Play size={14} />} onClick={() => { PauseResumeSession(task.id) }} />}
-                        <ActionButton icon={<CircleCheckBig size={14} />} onClick={() => { EndSession(task.id) }} />
+                        <ActionButtons type="pause_resume" taskId={task.id} />
+                        <ActionButtons type="extend" taskId={task.id} />
+                        <ActionButtons type="complete" taskId={task.id} />
                     </ActionPane>}
                 {!isTaskActive &&
                     <ActionPane
@@ -42,10 +39,8 @@ export default function TaskCard({ task }) {
                             {`${taskTime || 0}min`}
                         </motion.span>}
                         animationType={"slide"}>
-                        <ActionButton icon={<Play size={14} />} onClick={() => { StartSession(task.id, taskTime) }} />
-                        <ActionButton
-                            icon={<Trash2 size={14} />}
-                            onClick={() => { dispatch({ type: "DELETE", payload: { taskId: task.id } }) }} />
+                        <ActionButtons type="start" taskId={task.id} taskTime={taskTime} />
+                        <ActionButtons type="delete" taskId={task.id} />
                     </ActionPane>}
             </div>
             <div className="divider" />
