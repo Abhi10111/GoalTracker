@@ -65,7 +65,7 @@ export function SessionProvider({ children }) {
             id: curSession.id,
             taskId: curSession.taskId,
             startTime: curSession.startTime,
-            endTime: (new Date()).toLocaleString('en-GB'),
+    endTime: (new Date()).toLocaleString('en-GB'),
             duration: curSession.duration,
         }
         console.log("Session ended:", endSession);

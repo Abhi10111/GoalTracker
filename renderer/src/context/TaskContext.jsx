@@ -7,32 +7,8 @@ export const TasksContext = createContext(null);
 function tasksReducer(state, action) {
     switch (action.type) {
         case "FETCH_TASKS": {
-            const updatedState = action.payload.map(task =>
-            (
-                {
-                    ...task,
-                    subtasks: task.subtasks.map(subtask => {
-                        if (subtask.completed && !IsModifiedToday(subtask.lastModified || "")) {
-                            if (subtask.daily) {
-                                return {
-                                    ...subtask,
-                                    completed: false,
-                                    lastModified: new Date().toISOString()
-                                }
-                            }
-                            return null;
-                        }
-                        else {
-                            return subtask;
-                        }
-                    }
-                    ).filter(Boolean)
-                }
-            ));
-            window.api.updateTasks(updatedState);
-            return updatedState;
+            return action.payload;
         }
-
         case "TOGGLE": {
             const updatedState = action.payload.subtaskId ? state.map(task =>
                 task.id === action.payload.taskId
@@ -41,8 +17,7 @@ function tasksReducer(state, action) {
                             subtask.id === action.payload.subtaskId
                                 ? {
                                     ...subtask,
-                                    completed: !subtask.completed,
-                                    lastModified: new Date().toISOString()
+                                    completed: !subtask.completed
                                 }
                                 : subtask)
                     }
@@ -50,7 +25,7 @@ function tasksReducer(state, action) {
                 : state.map(task => task.id === action.payload.taskId
                     ? {
                         ...task,
-                        completed: !task.completed
+                        completed: (new Date()).toLocaleString('en-IN')
                     }
                     : task)
             window.api.updateTasks(updatedState);
@@ -63,7 +38,7 @@ function tasksReducer(state, action) {
                 id: crypto.randomUUID(),
                 title: action.payload.title,
                 estimatedTime: parseInt(hh, 10) * 60 + parseInt(mm, 10),
-                completed: false,
+                created: (new Date()).toLocaleString('en-IN'),
                 subtasks: []
             }];
             window.api.updateTasks(updatedState);
@@ -82,9 +57,7 @@ function tasksReducer(state, action) {
                                 id: crypto.randomUUID(),
                                 task: action.payload.title,
                                 estimatedTime: parseInt(hh, 10) * 60 + parseInt(mm, 10),
-                                daily: false,
                                 completed: false,
-                                lastModified: new Date().toISOString()
                             }
                         ]
                     }
@@ -108,12 +81,12 @@ function tasksReducer(state, action) {
             window.api.updateTasks(updatedState);
             return updatedState;
         }
-        
+
         case "EXTEND": {
             const updatedState = state.map(task =>
                 task.id === action.payload.taskId
-                ? { ...task, estimatedTime: task.estimatedTime + 10 }
-                : task
+                    ? { ...task, estimatedTime: task.estimatedTime + 10 }
+                    : task
             )
             window.api.updateTasks(updatedState);
             return updatedState;
@@ -137,9 +110,11 @@ export function TaskProvider({ children }) {
     </TasksContext.Provider>
 }
 
-export function IsModifiedToday(dateString) {
-    const todayStart = new Date().setHours(0, 0, 0, 0);
-    const lastModified = new Date(dateString).getTime();
-    return lastModified >= todayStart;
+export function isModifiedToday(dateString) {
+    const storedDatePart = dateString.split(",")[0].trim();
+
+    const todayDatePart = new Date().toLocaleDateString("en-IN");
+
+    return storedDatePart === todayDatePart;
 }
 

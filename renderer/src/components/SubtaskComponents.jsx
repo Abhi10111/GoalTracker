@@ -1,14 +1,14 @@
 import React, { useContext } from "react"
 import ActionButtons from "./ActionButtons.jsx";
 import { motion } from "framer-motion";
-import { ChevronDown, Plus, Trash2 } from "lucide-react";
+import { ChevronDown, Plus } from "lucide-react";
 import CircleCheckbox from "./CheckBox.jsx";
-import { IsModifiedToday, TasksContext } from "../context/TaskContext.jsx";
+import { TasksContext } from "../context/TaskContext.jsx";
 import { ActionPane } from "../utils/UIUtils.jsx";
 
 export function SubTasks({ taskId }) {
     const { tasks, dispatch } = useContext(TasksContext);
-    const subtasks = tasks.find(task => task.id === taskId)?.subtasks?.filter(subtask => IsModifiedToday(subtask.lastModified) || !subtask.completed);
+    const subtasks = tasks.find(task => task.id === taskId)?.subtasks;
     return (
         <motion.div className="subtask-area"
             initial={{ height: 0 }}
@@ -45,7 +45,7 @@ export function SubTasks({ taskId }) {
 
 export function SubtaskHeader({ taskId, subtasksOpen, onClick, onClickAddSubtask }) {
     const { tasks, _ } = useContext(TasksContext);
-    const subtasks = tasks.find(task => task.id === taskId)?.subtasks?.filter(subtask => IsModifiedToday(subtask.lastModified) || !subtask.completed);
+    const subtasks = tasks.find(task => task.id === taskId)?.subtasks;
     const totalSubtasks = subtasks?.length || 0;
     const completedSubtasks = subtasks?.filter(subtask => subtask.completed).length || 0;
 
