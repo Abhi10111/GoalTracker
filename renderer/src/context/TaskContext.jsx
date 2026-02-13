@@ -1,3 +1,4 @@
+import { time } from "framer-motion";
 import React from "react";
 import { createContext, useReducer, useEffect } from "react";
 
@@ -32,8 +33,8 @@ function tasksReducer(state, action) {
             return updatedState;
         }
 
-        case "TOGGLE_SUBTASK": {
-            const updatedState = state.map(task =>
+        case "TOGGLE": {
+            const updatedState = action.payload.subtaskId ? state.map(task =>
                 task.id === action.payload.taskId
                     ? {
                         ...task, subtasks: task.subtasks.map(subtask =>
@@ -45,16 +46,24 @@ function tasksReducer(state, action) {
                                 }
                                 : subtask)
                     }
-                    : task
-            );
+                    : task)
+                : state.map(task => task.id === action.payload.taskId
+                    ? {
+                        ...task,
+                        completed: !task.completed
+                    }
+                    : task)
             window.api.updateTasks(updatedState);
             return updatedState;
         }
         case "ADD_TASK": {
+            const [hh, mm] = action.payload.time.split(":")
             const updatedState = [...state,
             {
                 id: crypto.randomUUID(),
                 title: action.payload.title,
+                estimatedTime: parseInt(hh, 10) * 60 + parseInt(mm, 10),
+                completed: false,
                 subtasks: []
             }];
             window.api.updateTasks(updatedState);
@@ -96,6 +105,16 @@ function tasksReducer(state, action) {
                         : task
                 ) :
                 state.filter(task => task.id !== action.payload.taskId);
+            window.api.updateTasks(updatedState);
+            return updatedState;
+        }
+        
+        case "EXTEND": {
+            const updatedState = state.map(task =>
+                task.id === action.payload.taskId
+                ? { ...task, estimatedTime: task.estimatedTime + 10 }
+                : task
+            )
             window.api.updateTasks(updatedState);
             return updatedState;
         }

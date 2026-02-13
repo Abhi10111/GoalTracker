@@ -1,9 +1,10 @@
 import React, { useContext } from "react"
+import ActionButtons from "./ActionButtons.jsx";
 import { motion } from "framer-motion";
 import { ChevronDown, Plus, Trash2 } from "lucide-react";
 import CircleCheckbox from "./CheckBox.jsx";
 import { IsModifiedToday, TasksContext } from "../context/TaskContext.jsx";
-import { ActionPane, ActionButton } from "../utils/UIUtils.jsx";
+import { ActionPane } from "../utils/UIUtils.jsx";
 
 export function SubTasks({ taskId }) {
     const { tasks, dispatch } = useContext(TasksContext);
@@ -21,7 +22,7 @@ export function SubTasks({ taskId }) {
                     <div className="flex items-center" style={{ gap: '5px', width: '70%' }}>
                         <CircleCheckbox
                             isChecked={subtask.completed}
-                            onClick={() => dispatch({ type: "TOGGLE_SUBTASK", payload: { taskId: taskId, subtaskId: subtask.id } })}
+                            onClick={() => dispatch({ type: "TOGGLE", payload: { taskId: taskId, subtaskId: subtask.id } })}
                         />
                         <span className={subtask.completed ? "line-through opacity-50" : "opacity-100"}> {subtask.task}</span>
                     </div>
@@ -29,12 +30,10 @@ export function SubTasks({ taskId }) {
                         idle={<motion.span
                             style={{ opacity: 0.5, position: "absolute", pointerEvents: "none" }}
                             variants={{ hovered: { opacity: 0 } }}>
-                            {`${subtask.estimatedTime}min`}
+                            {`${subtask.estimatedTime ?? 0}min`}
                         </motion.span>}
                         animationType={"fade"}>
-                        <ActionButton
-                            icon={<Trash2 size={14} />}
-                            onClick={() => { dispatch({ type: "DELETE", payload: { taskId: taskId, subtaskId: subtask.id } }) }} />
+                        <ActionButtons type="delete" taskId={taskId} subtaskId={subtask.id} />
                     </ActionPane>
                 </motion.div>
             )}

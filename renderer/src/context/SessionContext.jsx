@@ -37,20 +37,30 @@ export function SessionProvider({ children }) {
         };
 
         setCurSession(session);
+        console.log("Session started:", session);
     }
 
     function PauseResumeSession(taskId) {
-        if (!curSession || curSession.taskId!=taskId) return;
-        
+        if (!curSession || curSession.taskId != taskId) return;
+
         setCurSession(s => ({
             ...s,
             isPaused: !s.isPaused
         }));
     }
-    
+
+    function ExtendSession(taskId) {
+        if (!curSession || curSession.taskId != taskId) return;
+
+        setCurSession(s => ({
+            ...s,
+            duration:s.duration+10,
+            remainingSec: s.remainingSec + 10*60
+        }));
+    }
     function EndSession(taskId) {
-        if (!curSession || curSession.taskId!=taskId) return;
-        
+        if (!curSession || curSession.taskId != taskId) return;
+
         const endSession = {
             id: curSession.id,
             taskId: curSession.taskId,
@@ -62,7 +72,7 @@ export function SessionProvider({ children }) {
         setCurSession(null);
     }
 
-    return (<SessionContext.Provider value={{ curSession, StartSession, PauseResumeSession, EndSession }}>
+    return (<SessionContext.Provider value={{ curSession, StartSession, PauseResumeSession, ExtendSession, EndSession }}>
         {children}
     </SessionContext.Provider>)
 }

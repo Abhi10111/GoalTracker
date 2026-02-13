@@ -3,7 +3,6 @@ import { useState, useEffect } from 'react'
 import { TaskProvider } from './context/TaskContext.jsx'
 import './index.css'
 
-import { MotionConfig } from 'framer-motion'
 import FocusedTask from './components/FocusedTask.jsx'
 import ResizeButton from './components/ResizeButton';
 import TaskArea from './components/TaskArea';
