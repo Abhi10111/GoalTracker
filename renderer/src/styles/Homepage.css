@@ -1,0 +1,22 @@
+.user-actions {
+    display: flex;
+    justify-content: center;
+    padding: 0.1rem 0.2rem ;
+    background-color: rgba(64, 64, 64, 0.2);
+    border-radius: 4px;
+    width:20%;
+    margin:2% 0;
+}
+
+.user-actions button {
+    margin: 0.5rem 0;
+    width: fit-content;
+    display: flex;
+    align-items: center;
+    padding: 7px;
+    gap: 3px;
+    color: #808080;
+    font-size: 16px;
+    font-weight: 700;
+    border-radius: 4px;
+}
