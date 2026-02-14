@@ -26,15 +26,17 @@ export function SubTasks({ taskId }) {
                         />
                         <span className={subtask.completed ? "line-through opacity-50" : "opacity-100"}> {subtask.task}</span>
                     </div>
-                    <ActionPane
-                        idle={<motion.span
-                            style={{ opacity: 0.5, position: "absolute", pointerEvents: "none" }}
-                            variants={{ hovered: { opacity: 0 } }}>
-                            {`${subtask.estimatedTime ?? 0}min`}
-                        </motion.span>}
-                        animationType={"fade"}>
-                        <ActionButtons type="delete" taskId={taskId} subtaskId={subtask.id} />
-                    </ActionPane>
+                    {!subtask.completed &&
+                        <ActionPane
+                            idle={<motion.span
+                                style={{ opacity: 0.5, position: "absolute", pointerEvents: "none" }}
+                                variants={{ hovered: { opacity: 0 } }}>
+                                {`${subtask.estimatedTime ?? 0}min`}
+                            </motion.span>}
+                            animationType={"fade"}>
+                            <ActionButtons type="delete" taskId={taskId} subtaskId={subtask.id} />
+                        </ActionPane>
+                    }
                 </motion.div>
             )}
 
