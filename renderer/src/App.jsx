@@ -1,23 +1,26 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
-import { TaskProvider } from './context/TaskContext.jsx'
+import { MemoryRouter, Routes, Route } from "react-router-dom";
 import './index.css'
 
-import FocusedTask from './components/FocusedTask.jsx'
+
 import ResizeButton from './components/ResizeButton';
 import TaskArea from './components/TaskArea';
-import { SessionProvider } from './context/SessionContext.jsx'
+
+import HomePage from './pages/HomePage.jsx';
+import Today from './pages/Today.jsx';
 
 function App() {
-  const [collapsed, setCollapsed] = useState(false);
-
-  useEffect(() => {
-    window.api.resize(collapsed);
-  }, [collapsed]);
-
   return (
     <div className='App'>
-      <SessionProvider>
+      <MemoryRouter initialEntries={["/"]}>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          {/* <Route path="/list/:id" element={<ListView />} /> */}
+          <Route path="/today" element={<Today />} />
+        </Routes>
+      </MemoryRouter>
+      {/* <SessionProvider>
         <TaskProvider>
           {collapsed ?
             <FocusedTask unFocus={() => setCollapsed(!collapsed)} />
@@ -30,7 +33,7 @@ function App() {
             </>
           }
         </TaskProvider>
-      </SessionProvider >
+      </SessionProvider > */}
     </div >
   )
 }

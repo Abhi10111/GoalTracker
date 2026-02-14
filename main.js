@@ -66,8 +66,6 @@ ipcMain.handle("window:drag", (event) => {
 function create() {
   win = new BrowserWindow({
     x: 100,
-    width: width,
-    height: fullHeight,
     frame: false,
     transparent: true,
     alwaysOnTop: true,

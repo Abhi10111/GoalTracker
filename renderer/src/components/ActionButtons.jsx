@@ -8,7 +8,7 @@ const actionButtonVariants = {
     hovered: { color: "#ffffff" }
 };
 
-function ActionButton({ icon, onClick }) {
+export function ActionButton({ icon, onClick }) {
     return (
         <motion.button
             variants={actionButtonVariants}
