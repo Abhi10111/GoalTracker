@@ -10,7 +10,11 @@ const taskPath = path.join(app.getPath("userData"), "tasks.json");
 const width = 320;
 const collapsedHeight = 60;
 const fullHeight = 890;
-
+let dimensions = {
+  collapsedtasks: { x: 320, y: 60 },
+  fulltasks: { x: 320, y: 890 },
+  listview: { x: 740, y: 890 }
+}
 let win = null;
 let dragOffset = null;
 
@@ -34,10 +38,10 @@ ipcMain.handle("tasks:update", (_, tasks) => {
   return true;
 });
 
-ipcMain.handle("window:resize", (event, collapsed) => {
+ipcMain.handle("window:resize", (event, windowName) => {
   const win = BrowserWindow.fromWebContents(event.sender);
   if (win) {
-    win.setBounds({ width: width, height: collapsed ? collapsedHeight : fullHeight });
+    win.setBounds({ width: dimensions[windowName].x, height: dimensions[windowName].y });
   }
 });
 
@@ -64,10 +68,12 @@ ipcMain.handle("window:drag", (event) => {
 });
 
 function create() {
+  const primaryDisplay = screen.getPrimaryDisplay();
+  const screenSize = primaryDisplay.size;
+  dimensions["homepage"] = { x: parseInt(screenSize.width * 0.9, 10), y: screenSize.height }
   win = new BrowserWindow({
-    x: 100,
-    width: width,
-    height: fullHeight,
+    width: dimensions.homepage.x,
+    height: dimensions.homepage.y,
     frame: false,
     transparent: true,
     alwaysOnTop: true,
@@ -79,7 +85,7 @@ function create() {
   });
 
   // ← load react build output
-  win.setPosition(20, 50)
+  win.setPosition(parseInt((screenSize.width - dimensions.homepage.x) * 0.5, 10), 50)
   win.loadFile(path.join(__dirname, "renderer/dist/index.html"));
   win.show();
 }
