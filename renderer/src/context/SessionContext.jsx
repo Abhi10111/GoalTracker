@@ -28,7 +28,7 @@ export function SessionProvider({ children }) {
         const session = {
             id: crypto.randomUUID(),
             taskId: taskId,
-            startTime: Date.now(),
+            startTime: (new Date()).toLocaleString('en-IN'),
             endTime: null,
             duration: duration,
             remainingSec: duration * 60,
@@ -65,7 +65,7 @@ export function SessionProvider({ children }) {
             id: curSession.id,
             taskId: curSession.taskId,
             startTime: curSession.startTime,
-            endTime: Date.now(),
+    endTime: (new Date()).toLocaleString('en-IN'),
             duration: curSession.duration,
         }
         console.log("Session ended:", endSession);
