@@ -1,0 +1,52 @@
+.navigation-buttons
+ {
+    display: flex;
+    justify-content: center;
+    padding: 0.5rem 1rem;
+    background-color: rgba(64, 64, 64, 0.2);
+    border-radius: 4px;
+    width: fit-content;
+    gap: 8px;
+    margin: 2% 0;
+}
+
+.navigation-buttons
+ button {
+    /* margin: 0.5rem 0; */
+    width: fit-content;
+    display: flex;
+    align-items: center;
+    padding: 0;
+    gap: 3px;
+    color: #808080;
+    font-size: 16px;
+    font-weight: 700;
+    border-radius: 4px;
+}
+
+.homepage {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    -webkit-app-region: no-drag;
+    user-select: none;
+}
+
+.homepage-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+h2,
+h1 {
+    font-family: "Inter", system-ui;
+}
+
+.list-area {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 28px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
