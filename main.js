@@ -2,14 +2,17 @@ import { app, BrowserWindow, ipcMain, screen } from "electron";
 import { fileURLToPath } from "url";
 import fs from "fs";
 import path from "path";
-import { log } from "console";
+import { JsonListService } from "./services/listService.js";
+import { JsonTaskService } from "./services/taskService.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const taskPath = path.join(app.getPath("userData"), "tasks.json");
+const listPath = path.join(app.getPath("userData"), "lists.json");
+const listService = new JsonListService(listPath);
+const taskService = new JsonTaskService(taskPath);
 const width = 320;
 const collapsedHeight = 60;
-const fullHeight = 890;
 let dimensions = {
   collapsedtasks: { x: 320, y: 60 },
   fulltasks: { x: 320, y: 890 },
@@ -18,24 +21,33 @@ let dimensions = {
 let win = null;
 let dragOffset = null;
 
-function readTasks() {
-  const raw = fs.readFileSync(taskPath, 'utf-8')
-  return JSON.parse(raw);
-}
-
 function updateTasks(tasks) {
   fs.writeFileSync(
     taskPath,
     JSON.stringify(tasks, null, 2)
   );
 }
-ipcMain.handle("tasks:load", () => {
-  return readTasks();
+
+ipcMain.handle("tasks:get", () => {
+  return taskService.getAll();
+});
+
+ipcMain.handle("tasks:add", (event, task) => {
+  return taskService.create(task);
 });
 
 ipcMain.handle("tasks:update", (_, tasks) => {
   updateTasks(tasks);
   return true;
+});
+
+ipcMain.handle("lists:get", () => {
+  let lists = listService.getAll();
+  return lists;
+});
+
+ipcMain.handle("lists:add", (event, name) => {
+  return listService.create(name);
 });
 
 ipcMain.handle("window:resize", (event, windowName) => {

@@ -36,7 +36,8 @@ class ListService {
         const newList = {
             id: crypto.randomUUID(),
             name: trimmed,
-            createdAt: now
+            createdAt: now,
+            tasks: []
         };
 
         this.lists.push(newList);

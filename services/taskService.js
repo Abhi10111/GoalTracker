@@ -15,11 +15,6 @@ class TaskService {
         throw new Error("createStorage() must be implemented");
     }
 
-    getTasksByListId(listId) {
-        return this.tasks
-            .filter(task => task.listId === listId);
-    }
-
     getAll(){
         return this.tasks
     }
