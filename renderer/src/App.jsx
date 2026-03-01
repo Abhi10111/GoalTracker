@@ -2,38 +2,31 @@ import React from 'react'
 import { useState, useEffect } from 'react'
 import { MemoryRouter, Routes, Route } from "react-router-dom";
 import './index.css'
-
-
-import ResizeButton from './components/ResizeButton';
-import TaskArea from './components/TaskArea';
+import './App.css'
+import { TaskProvider } from './context/TaskContext.jsx';
+import { ListProvider } from './context/ListContext.jsx';
+import { SessionProvider } from './context/SessionContext.jsx';
 
 import HomePage from './pages/HomePage.jsx';
 import Today from './pages/Today.jsx';
+// import ListView from './pages/ListView.jsx';
 
 function App() {
   return (
     <div className='App'>
-      <MemoryRouter initialEntries={["/"]}>
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          {/* <Route path="/list/:id" element={<ListView />} /> */}
-          <Route path="/today" element={<Today />} />
-        </Routes>
-      </MemoryRouter>
-      {/* <SessionProvider>
-        <TaskProvider>
-          {collapsed ?
-            <FocusedTask unFocus={() => setCollapsed(!collapsed)} />
-            : <>
-              <div className='header'>
-                <h1>Today</h1>
-                <ResizeButton collapsed={collapsed} onClick={() => setCollapsed(!collapsed)} />
-              </div>
-              <TaskArea />
-            </>
-          }
-        </TaskProvider>
-      </SessionProvider > */}
+      <SessionProvider>
+        <ListProvider>
+          <TaskProvider>
+            <MemoryRouter initialEntries={["/"]}>
+              <Routes>
+                <Route path="/" element={<HomePage />} />
+                {/* <Route path="/list/:id" element={<ListView />} /> */}
+                <Route path="/today" element={<Today />} />
+              </Routes>
+            </MemoryRouter>
+          </TaskProvider>
+        </ListProvider>
+      </ SessionProvider>
     </div >
   )
 }

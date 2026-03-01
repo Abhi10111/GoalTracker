@@ -1,6 +1,7 @@
 import React, { useEffect } from "react"
 import { motion } from "framer-motion";
 import "../styles/HomePage.css"
+import ListArea from "../components/homepage/ListArea";
 import NavigationPane from "../components/common/NavigationPane";
 
 export default function HomePage() {
@@ -15,7 +16,7 @@ export default function HomePage() {
                 <NavigationPane />
             </div>
             <h2>Your Lists</h2>
-            {/* <ListArea /> */}
+            <ListArea />
         </motion.div>
     )
 }   

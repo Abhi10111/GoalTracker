@@ -18,10 +18,12 @@ button {
   -webkit-app-region: no-drag;
 }
 
-input{
+input {
   -webkit-app-region: no-drag;
 }
-span,button{
+
+span,
+button {
   user-select: none;
   cursor: default;
 }
@@ -33,8 +35,9 @@ span,button{
   box-sizing: border-box;
   border-radius: 8px;
   overflow: hidden;
-  background-color: rgb(22, 22, 22);
-  border: 3px solid green;
+  border: 1px solid #2ecc71;
+  box-shadow: 0 0 0 1px #2ecc71 inset,
+    0 0 12px rgba(46, 204, 113, 0.35);
   color: white
 }
 
@@ -51,4 +54,8 @@ span,button{
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+
+::-webkit-scrollbar {
+  display: none;
 }

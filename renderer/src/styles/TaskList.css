@@ -1,0 +1,14 @@
+.task-list {
+    width: 50%;
+    height: 90%;
+    border-radius: 14px;
+    border: 1px solid #2a2a2a;
+    background: linear-gradient(180deg, #232323 0%, #1c1c1c 100%);
+    padding: 0 0.5rem
+}
+
+.today {
+    border: 1px solid #2ecc71;
+    box-shadow: 0 0 0 1px #2ecc71 inset,
+        0 0 12px rgba(46, 204, 113, 0.35);
+}

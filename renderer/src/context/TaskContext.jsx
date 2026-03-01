@@ -1,6 +1,5 @@
 import { time } from "framer-motion";
-import React from "react";
-import { createContext, useReducer, useEffect } from "react";
+import React, { createContext, useReducer, useEffect } from "react";
 
 export const TasksContext = createContext(null);
 
@@ -33,16 +32,23 @@ function tasksReducer(state, action) {
         }
         case "ADD_TASK": {
             const [hh, mm] = action.payload.time.split(":")
-            const updatedState = [...state,
+            const newTask =
             {
                 id: crypto.randomUUID(),
                 title: action.payload.title,
                 estimatedTime: parseInt(hh, 10) * 60 + parseInt(mm, 10),
-                created: (new Date()).toLocaleString('en-IN'),
-                subtasks: []
-            }];
-            window.api.updateTasks(updatedState);
-            return updatedState;
+                created: getToday(),
+                subtasks: [],
+                listId: action.payload.listId,
+                deadLine: ""
+            };
+            if (newTask.listId === "today") {
+                newTask.listId = ""
+                newTask.deadLine = getToday()
+            }
+
+            window.api.addTask(newTask);
+            return [...state, newTask];
         }
 
         case "ADD_SUBTASK": {
@@ -91,6 +97,16 @@ function tasksReducer(state, action) {
             window.api.updateTasks(updatedState);
             return updatedState;
         }
+
+        case "MARK_FOR_TODAY":
+            const updatedState = state.map(task =>
+                task.id === action.payload
+                    ? { ...task, deadLine: getToday().split(",")[0].trim() }
+                    : task
+            );
+
+            window.api.updateTasks(updatedState);
+            return updatedState;
         default:
             return state;
     }
@@ -99,18 +115,31 @@ function tasksReducer(state, action) {
 export function TaskProvider({ children }) {
     const [tasks, dispatch] = useReducer(tasksReducer, []);
 
+    function markTaskForToday(taskId) {
+        dispatch({
+            type: "MARK_FOR_TODAY",
+            payload: taskId
+        });
+    }
+    function getTaskbyListId(listId) {
+        if (listId === "today") {
+            return tasks.filter(task => isModifiedToday(task.deadLine))
+        }
+        return tasks.filter(task => task.listId === listId && !isModifiedToday(task.deadLine) && !task.completed)
+    }
     useEffect(() => {
         window.api.loadTasks().then(data => {
             dispatch({ type: "FETCH_TASKS", payload: data });
         });
     }, []);
 
-    return <TasksContext.Provider value={{ tasks, dispatch }}>
+    return <TasksContext.Provider value={{ tasks, dispatch, getTaskbyListId, markTaskForToday }}>
         {children}
     </TasksContext.Provider>
 }
 
 export function isModifiedToday(dateString) {
+    if (!dateString) return false
     const storedDatePart = dateString.split(",")[0].trim();
 
     const todayDatePart = new Date().toLocaleDateString("en-IN");
@@ -118,3 +147,6 @@ export function isModifiedToday(dateString) {
     return storedDatePart === todayDatePart;
 }
 
+function getToday() {
+    return (new Date()).toLocaleString('en-IN')
+}
