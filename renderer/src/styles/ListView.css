@@ -6,9 +6,15 @@
     height: 100%;
 }
 
-.listview .tasklists{
+.listview .tasklists {
     display: flex;
     width: 100%;
     gap: 16px;
     flex: 1;
+}
+
+.listview-header {
+    display: flex;
+    width: 100%;
+    align-items: center;
 }

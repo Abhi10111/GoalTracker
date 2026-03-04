@@ -7,7 +7,8 @@
     border-radius: 4px;
     width: fit-content;
     gap: 8px;
-    margin: 2% 0;
+    margin: 1rem 0;
+    margin-left: auto;
 }
 
 .navigation-buttons
@@ -28,13 +29,11 @@
     display: flex;
     flex-direction: column;
     height: 100%;
-    -webkit-app-region: no-drag;
     user-select: none;
 }
 
 .homepage-header {
     display: flex;
-    justify-content: space-between;
     align-items: center;
 }
 
