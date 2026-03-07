@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { ChevronDown, Plus } from "lucide-react";
 import CircleCheckbox from "./CheckBox.jsx";
 import { TasksContext } from "../context/TaskContext.jsx";
-import { ActionPane } from "../utils/UIUtils.jsx";
+import { ActionPane } from "./common/AnimatedUI.jsx";
 
 export function SubTasks({ taskId }) {
     const { tasks, dispatch } = useContext(TasksContext);
