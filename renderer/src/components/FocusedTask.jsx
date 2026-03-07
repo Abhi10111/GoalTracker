@@ -3,9 +3,8 @@ import ActionButtons from './ActionButtons.jsx';
 import { motion } from 'framer-motion';
 import { SessionContext } from '../context/SessionContext.jsx';
 import { TasksContext } from '../context/TaskContext.jsx';
-import { ActionPane } from '../utils/UIUtils.jsx';
+import { ActionPane, Clock } from './common/AnimatedUI.jsx';
 import { Maximize2 } from "lucide-react";
-import { Clock } from '../utils/UIUtils.jsx';
 import './FocusedTask.css';
 
 function drag(e) {
@@ -38,7 +37,7 @@ export default function FocusedTask({ unFocus }) {
             <ActionPane
                 idle={<Clock remainingSec={curSession?.remainingSec ?? 0} />}
                 animationType={"slide"}>
-                {focusedTask && <ActionButtons type="pause_resume" taskId={focusedTask.id}/>}
+                {focusedTask && <ActionButtons type="pause_resume" taskId={focusedTask.id} />}
                 {focusedTask && <ActionButtons type="extend" taskId={focusedTask.id} />}
                 {focusedTask && <ActionButtons type="complete" taskId={focusedTask.id} />}
                 <motion.button

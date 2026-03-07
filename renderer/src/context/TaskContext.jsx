@@ -1,5 +1,6 @@
 import { time } from "framer-motion";
 import React, { createContext, useReducer, useEffect } from "react";
+import { getToday, isModifiedToday } from "../utils/dateUtils.js";
 
 export const TasksContext = createContext(null);
 
@@ -32,8 +33,7 @@ function tasksReducer(state, action) {
         }
         case "ADD_TASK": {
             const [hh, mm] = action.payload.time.split(":")
-            const newTask =
-            {
+            const newTask = {
                 id: crypto.randomUUID(),
                 title: action.payload.title,
                 estimatedTime: parseInt(hh, 10) * 60 + parseInt(mm, 10),
@@ -42,10 +42,21 @@ function tasksReducer(state, action) {
                 listId: action.payload.listId,
                 deadLine: ""
             };
-            if (newTask.listId === "today") {
-                newTask.listId = ""
-                newTask.deadLine = getToday()
-            }
+            window.api.addTask(newTask);
+            return [...state, newTask];
+        }
+
+        case "ADD_TODAY_TASK": {
+            const [hh, mm] = action.payload.time.split(":")
+            const newTask = {
+                id: crypto.randomUUID(),
+                title: action.payload.title,
+                estimatedTime: parseInt(hh, 10) * 60 + parseInt(mm, 10),
+                created: getToday(),
+                subtasks: [],
+                listId: "",
+                deadLine: getToday().split(",")[0].trim()
+            };
 
             window.api.addTask(newTask);
             return [...state, newTask];
@@ -138,15 +149,3 @@ export function TaskProvider({ children }) {
     </TasksContext.Provider>
 }
 
-export function isModifiedToday(dateString) {
-    if (!dateString) return false
-    const storedDatePart = dateString.split(",")[0].trim();
-
-    const todayDatePart = new Date().toLocaleDateString("en-IN");
-
-    return storedDatePart === todayDatePart;
-}
-
-function getToday() {
-    return (new Date()).toLocaleString('en-IN')
-}

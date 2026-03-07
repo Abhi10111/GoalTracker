@@ -1,7 +1,9 @@
 import React, { useContext } from "react";
 import { motion } from "framer-motion";
-import { isModifiedToday, TasksContext } from '../context/TaskContext.jsx';
-import { AddTaskButton, formatMinutesToHMString } from "../utils/UIUtils.jsx";
+import { TasksContext } from '../context/TaskContext.jsx';
+import { isModifiedToday } from '../utils/dateUtils.js';
+import AddTaskButton from "./AddTaskButton.jsx";
+import { formatMinutesToHMString } from "../utils/formatters.js";
 import TaskCard from './TaskCard';
 import './TaskArea.css'
 

@@ -2,9 +2,9 @@ import React, { useContext } from "react";
 import { motion, scale } from "framer-motion";
 import { MoreVertical } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { formatMinutesToHMString } from "../../utils/UIUtils";
+import { formatMinutesToHMString } from "../../utils/formatters.js";
 import "../../styles/ListCard.css";
-import { TasksContext } from "../../context/TaskContext"; 
+import { TasksContext } from "../../context/TaskContext";
 
 const listCardVariants = {
   hovered: {
