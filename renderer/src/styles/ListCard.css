@@ -9,6 +9,8 @@
   justify-content: flex-start;
   transition: all 0.2s ease;
   cursor: pointer;
+  -webkit-app-region: no-drag;
+
 }
 
 .listcard-header {

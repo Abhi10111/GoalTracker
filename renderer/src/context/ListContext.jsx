@@ -10,7 +10,11 @@ export function ListProvider({ children }) {
             setLists(lists);
         });
     }, []);
-    return <ListContext.Provider value={{ lists }}>
+
+    function getListById(listId) {
+        return lists.find(list => list.id === listId)
+    }
+    return <ListContext.Provider value={{ lists, getListById }}>
         {children}
     </ListContext.Provider>
 }

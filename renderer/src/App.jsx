@@ -9,7 +9,7 @@ import { SessionProvider } from './context/SessionContext.jsx';
 
 import HomePage from './pages/HomePage.jsx';
 import Today from './pages/Today.jsx';
-// import ListView from './pages/ListView.jsx';
+import ListView from './pages/ListView.jsx';
 
 function App() {
   return (
@@ -20,7 +20,7 @@ function App() {
             <MemoryRouter initialEntries={["/"]}>
               <Routes>
                 <Route path="/" element={<HomePage />} />
-                {/* <Route path="/list/:id" element={<ListView />} /> */}
+                <Route path="/list/:id" element={<ListView />} />
                 <Route path="/today" element={<Today />} />
               </Routes>
             </MemoryRouter>
